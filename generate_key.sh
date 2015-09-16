@@ -4,7 +4,7 @@
 ##title           : generateLiveImage.sh
 ##description     : this script builds a debian live image, then writes it on a given media
 ##author          : ksamak
-##Date            : 2014/01/27
+##Date            : 2015/09/15
 ##Version         : 1.0.0
 ##usage           : generateLiveImage.sh
 ##notes           : Install live-build cdebootstrap parted to use this script
@@ -101,16 +101,17 @@ build_image() {
     yellow "configuring build"  # for more info on building options, run man lb_config
     lb config \
         --binary-images iso-hybrid \
-        --apt aptitude \
-        --architecture i386 \
-        --bootappend-live 'boot=live config quiet splash persistence' \
+        --apt apt-get \
+        --architecture amd64 \
+        --bootappend-live 'boot=live access=v3 config quiet splash persistence' \
         --firmware-chroot true \
         --archive-area "main contrib non-free" \
         --firmware-binary true \
         --backports true \
         --updates true \
-        --distribution wheezy \
+        --distribution jessie \
         --apt-recommends true \
+	--system live
 
     check "Config of image failed."
     green "build configured"
@@ -144,17 +145,59 @@ build_image() {
     ## Debian recommends the maintained metapackages beginning by "task-"
     yellow "setting installation packages"
     # vital section
-    echo "vim most tmux openssh-server"     >> config/package-lists/system.list.chroot
-    check "failed to set install packages."
-    echo "htop"     >> config/package-lists/system.list.chroot
-    echo "cryptsetup ecryptfs-utils"                   >> config/package-lists/system.list.chroot
+#    echo "vim most tmux openssh-server"     >> config/package-lists/system.list.chroot
+    echo "brltty openssh-server"     >> config/package-lists/system.list.chroot
+#    check "failed to set install packages."
+#    echo "htop"     >> config/package-lists/system.list.chroot
+#    echo "cryptsetup ecryptfs-utils"                   >> config/package-lists/system.list.chroot
     # desktop section
     #echo "task-french-desktop task-french"  >> config/package-lists/desktop.french.list.chroot # for the french
-    echo "task-xfce-desktop"                >> config/package-lists/desktop.xfce.list.chroot
-    echo "vlc"                              >> config/package-lists/desktop.multimedia.list.chroot
+#    echo "task-xfce-desktop"                >> config/package-lists/desktop.xfce.list.chroot
+    echo "task-mate-desktop"                >> config/package-lists/desktop.mate.list.chroot
     echo "gparted"                          >> config/package-lists/desktop.tools.list.chroot
     # non-free section
     echo "flashplugin-nonfree"              >> config/package-lists/desktop.non-free.list.chroot
+
+    # a11y section
+
+	# Add Hypra's repository
+  echo "deb http://debian.hypra.fr/debian/ jessie main" >> config/archives/hypra.list.chroot
+  echo "deb-src http://debian.hypra.fr/debian/ jessie main" >> config/archives/hypra.list.chroot
+cat << EOF >> config/archives/hypra.key.choot
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+mQINBFRSQMIBEACUKn8LkfTnVx+74FMC4smfjZpURgJw5vvEcce/Sk28Ih5QVXt/
+bi+jZTTnxOspDCqVc36g1wYKaFf5XuKl5Frg1PKAC0z5GT+s2hHT3W4DTBBq9arB
+Upf33cTb/0X+h2u+hjvLxu82Y8ikMrb+yfNUG3d+b1wExlT9RVycFD6FyVLGuUcl
+Ocm6wVu9xKvK/elenY4CjZANC1Y9ABAAWsphnVWpQZ84B6J2yB5T95DTwCxulzFT
+wYo40HfMwwDHy/kTziYz5o0P8BYVIDOXSMdVHxsPQhbNx36Uo1hzDtRf0Rggc1gj
+Ly5g/HBYaOSDBiVHPcn2VNe+WYUZGyJAPpV/5OJdmbmrj5GPC5WjKfOJkZ3+zrDo
+23vPV4ebWTvr1OZGE5QQlv9r7zqzdPLSQ3YJ8ujSWTppMeG3e/Z+ZG2/eSJek1la
+7XqmivlkEpvJMrFd66nYm8j1d6ldMUgIRvWeCIJlQG9pfTUsRvq7iRMLO6gEN1Hn
+G/hjWC5/0b/dqjU4dTR7h4RVShN1RAf6WT2zmqcfjth59ci1WoGAQ1X3Pp5YoI3m
+deHa7MwnWwsgsLS73mhD1w2/PREzkZgZ1Qs4xSOwlt+t5m38y8sUQVlQr7m1xto6
+mH7yonfQG+cHC6dL/f27TcoDcWnYiOEEMcWq8IPn4L1gO5jkwfWSLvpcvwARAQAB
+tCJhY2NlbGlicmVpbmZvIC0gamVua2lucyBhdXRvIGJ1aWxkiQI4BBMBAgAiBQJU
+UkDCAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw6vGaAjhHHsR9D/wM
+kJFLh9+9Yoe7anrMAg2CxZpY7SskOeCqJMZx1qUdy9UG9xs0dAIT+/RXMdDFMOGU
+ibsZfmr10PFOh+U8iUSgipq199uGk8R7G8B5/LqhFK8eWEJwGa9FNDhvUfkfT/fp
+kGRwLD07g+0XuEiEgiOQa9bnYmcUjwdZR4FJdT5p/rIfrIAi2ldtb8La29Oz2Kmo
+ed6K1pUrJ3Aw6CD1O2o6/PLVJ4b2hid5/WFqwFkI1XwO7445Xs4zLYLs+pf3KGGk
+vNGEjy3aIEMgXKziVboMYNpGhzuWIZZULRAg7lk9lQg8WRc+I3evj/wD9aL9OoUP
+m8WUmZtTfqt0i/bzJzBcw444vDumkw/aE4hPzvypmfJLgZyNSKLSqk4eZuRUW/aG
+QVxWYQXUeoMUMPEw5OAH/GlLdUTf2iv/FxEo7zQINsALwz1ZJAlUPaNuBeF5M4ut
+oi8l50CncpouwosHFdst6kxftujUG6RmCTqB679pXHx6UPzTbcPcyJ9Z0SfR1ZDc
+PATYEWZNBCecFEIHhui7ybtZ35OeUgKlFPfm38d4xpZfzlO4+Ot9fx7bGi9pVSop
+DZczyGz3JOAmhMtzso9p+zTDftvu4U4qfzPz9rcOJVOvUkgsHzpx2PUNbw2bpwVJ
+xCDZZY8gcKeNCK8cpSyEnrjuxkDBRp5ym+M/FCiDjQ==
+=acfX
+-----END PGP PUBLIC KEY BLOCK-----
+EOF
+
+	# Hypra and its dependencies
+    echo "gnome-orca hypra"              >> config/package-lists/desktop.a11y.list.chroot
     green "packaging configured"
 
 
