@@ -4,7 +4,7 @@
 ##title           : generateLiveImage.sh
 ##description     : this script builds a debian live image, then writes it on a given media
 ##author          : ksamak
-##Date            : 2015/09/15
+##Date            : 2014/01/27
 ##Version         : 1.0.0
 ##usage           : generateLiveImage.sh
 ##notes           : Install live-build cdebootstrap parted to use this script
