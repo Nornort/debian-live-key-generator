@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+# set a11y environment variable
+echo "export GTK_MODULES=gail:atk-bridge" >> /etc/profile
+
+# Orca autostart
+cat orca-autostart.desktop > /etc/xdg/autostart/orca-autostart.desktop
+
+# lightdm autologin
+cat lightdm.conf > /etc/lightdm/lightdm.conf
+
