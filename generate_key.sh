@@ -96,8 +96,8 @@ hooks() {
 build_image() {
     yellow "cleaning potential previous builds"
     ## cleaning in case of previous build ##
-    debug "rm -rf auto .build chroot* config local *.iso* binary.* binary*"
-    rm -rf auto .build chroot* local *.iso* binary.* config binary*
+    debug "rm -rf auto local *.iso* config binary.* binary* chroot* .build"
+    rm -rf auto local *.iso* config binary.* binary* chroot* .build
     if [ ${?} -ne 0 ]; then debug "removal of previous build went wrong."; fi
     debug "removal ok."
 
@@ -106,8 +106,8 @@ build_image() {
     yellow "configuring build"  # for more info on building options, run man lb_config
     lb config \
         --binary-images iso-hybrid \
-        --apt apt-get \
         --architecture amd64 \
+        --apt aptitude \
         --bootappend-live 'boot=live access=v3 config quiet splash persistence' \
         --firmware-chroot true \
         --firmware-binary true \
@@ -115,6 +115,18 @@ build_image() {
         --updates true \
         --distribution jessie \
         --apt-recommends true \
+        --debian-installer live \
+        --security true \
+        --source true \
+        --archive-areas "main contrib non-free" \
+        --iso-preparer hypra \
+        --iso-publisher hypra
+#        --mirror-bootstrap http://ftp.fr.debian.net/debian/ \
+#        --mirror-binary http://ftp.fr.debian.net/debian/ \
+#        --mirror-chroot-security http://security.debian.org/ \
+
+        #--debian-installer-preseedfile TODO
+        #--bootappend-install TODO add speech n shit, like access=v3
 
     check "Config of image failed."
     green "build configured"
@@ -151,8 +163,10 @@ build_image() {
     echo "brltty openssh-server"     >> config/package-lists/system.list.chroot
     check "failed to set install packages."
     echo "cryptsetup ecryptfs-utils"                   >> config/package-lists/system.list.chroot
+    echo "kexec-tools debian-installer debian-installer-launcher"                   >> config/package-lists/system.list.chroot
+    echo "firmware-linux-free firmware-linux-nonfree"                   >> config/package-lists/system.list.chroot
     # desktop section
-    echo "task-french-desktop task-french"  >> config/package-lists/desktop.french.list.chroot # for the french
+    echo "task-french-desktop task-french"  >> config/package-lists/desktop.french.list.chroot
     echo "task-mate-desktop"                >> config/package-lists/desktop.mate.list.chroot
     echo "gparted"                          >> config/package-lists/desktop.tools.list.chroot
     # non-free section
@@ -161,9 +175,14 @@ build_image() {
     # a11y section
 
 	# Add Hypra's repository
-    echo "deb http://debian.hypra.fr/debian/ jessie main" >> config/archives/hypra.list.chroot
-    echo "deb-src http://debian.hypra.fr/debian/ jessie main" >> config/archives/hypra.list.chroot
-    cat hypra-repository >> config/archives/hypra.key.chroot
+    echo "deb http://debian.hypra.fr/debian/ sid main non-free" >> config/archives/hypra.list.chroot
+    check "couldn't add extra repository"
+    #echo "deb-src http://debian.hypra.fr/debian/ jessie main non-free" >> config/archives/hypra.list.chroot
+    echo "deb http://debian.hypra.fr/debian/ sid main non-free" >> config/archives/hypra.list.binary
+    #echo "deb-src http://debian.hypra.fr/debian/ jessie main non-free" >> config/archives/hypra.list.binary
+    cat hypra-repository.gpg >> config/archives/hypra.key.chroot
+    #add mate-access packages
+    echo "mate-accessibility-full"                          >> config/package-lists/desktop.tools.list.chroot
 
 	# Hypra and its dependencies
     #echo "gnome-orca hypra"              >> config/package-lists/desktop.a11y.list.chroot
