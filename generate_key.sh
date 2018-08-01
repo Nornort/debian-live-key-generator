@@ -113,14 +113,14 @@ build_image() {
         --firmware-binary true \
         --backports false \
         --updates true \
-        --distribution jessie \
+        --distribution stretch \
         --apt-recommends true \
         --debian-installer live \
         --security true \
         --source true \
         --archive-areas "main contrib non-free" \
-        --iso-preparer hypra \
-        --iso-publisher hypra
+        --iso-preparer Nornort \
+        --iso-publisher Nornort
 #        --mirror-bootstrap http://ftp.fr.debian.net/debian/ \
 #        --mirror-binary http://ftp.fr.debian.net/debian/ \
 #        --mirror-chroot-security http://security.debian.org/ \
@@ -149,7 +149,7 @@ build_image() {
 #        --updates true \
 #        --apt aptitude \
 #        --grub-splash "splash.png" \
-#        --distribution wheezy \
+#        --distribution stretch \
 #        --apt-recommends true \
 ##################################################
 ##################################################
@@ -175,14 +175,19 @@ build_image() {
     # a11y section
 
 	# Add Hypra's repository
-    echo "deb http://debian.hypra.fr/debian/ sid main non-free" >> config/archives/hypra.list.chroot
+    echo "deb http://debian.hypra.fr/debian/ stretch main contrib non-free" >> config/archives/hypra.list.chroot
     check "couldn't add extra repository"
-    #echo "deb-src http://debian.hypra.fr/debian/ jessie main non-free" >> config/archives/hypra.list.chroot
-    echo "deb http://debian.hypra.fr/debian/ sid main non-free" >> config/archives/hypra.list.binary
-    #echo "deb-src http://debian.hypra.fr/debian/ jessie main non-free" >> config/archives/hypra.list.binary
+    echo "deb-src http://debian.hypra.fr/debian/ stretch main contrib non-free" >> config/archives/hypra.list.chroot
+    echo "deb http://debian.hypra.fr/debian/ stretch main contrib non-free" >> config/archives/hypra.list.binary
+    echo "deb-src http://debian.hypra.fr/debian/ stretch main contrib non-free" >> config/archives/hypra.list.binary
     cat hypra-repository.gpg >> config/archives/hypra.key.chroot
     #add mate-access packages
-    echo "mate-accessibility-full"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "hypra-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "hypra-archive-keyring"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "hypra-dropbox"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "hypra-kali"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "hypra-qt"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "hypra-voxygen-fr"                          >> config/package-lists/desktop.tools.list.chroot
 
 	# Hypra and its dependencies
     #echo "gnome-orca hypra"              >> config/package-lists/desktop.a11y.list.chroot
