@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##############################################
-##title           : generateLiveImage.sh
+##title           : generate_key.sh
 ##description     : this script builds a debian live image, then writes it on a given media
-##author          : ksamak
-##Date            : 2014/01/27
-##Licence         : GPLv3+
-##Version         : 1.0.0
-##usage           : generateLiveImage.sh
+##author          : ksamak Nornort
+##Date            : 2018/08/01
+##Licence         : GNU AGPLv3
+##Version         : 0.0.2
+##usage           : generate_key.sh
 ##notes           : Install live-build cdebootstrap parted to use this script
 ##############################################
 
@@ -19,7 +19,7 @@ usage() {
 }
 
 version() {
-    echo "0.2"
+    echo "0.0.2"
     exit 0
 }
 
