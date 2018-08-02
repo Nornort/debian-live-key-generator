@@ -3,7 +3,7 @@
 ##############################################
 ##title           : generate_key.sh
 ##description     : this script builds a debian live image, then writes it on a given media
-##author          : ksamak raphaelpoitevin Nornort
+##authors          : ksamak raphaelpoitevin Nornort
 ##Date            : 2018/08/01
 ##Licence         : GNU AGPLv3
 ##Version         : 0.0.2
