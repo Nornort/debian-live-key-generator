@@ -183,6 +183,8 @@ build_image() {
     cat hypra-repository.gpg >> config/archives/hypra.key.chroot
     #add mate-access packages
     echo "mate-accessibility-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "mate-accessibility-mbrola-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "mate-accessibility-misc"                          >> config/package-lists/desktop.tools.list.chroot
     #echo "hypra-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
     #echo "hypra-archive-keyring"                          >> config/package-lists/desktop.tools.list.chroot
     #echo "hypra-dropbox"                          >> config/package-lists/desktop.tools.list.chroot
