@@ -5,7 +5,7 @@
 ##description     : this script builds a debian live image, then writes it on a given media
 ##authors         : ksamak raphaelpoitevin Nornort
 ##Date            : 2018/08/01
-##Licence         : GNU AGPLv3
+##Licence         : GNU AGPLv3+
 ##Version         : 0.0.2
 ##usage           : generate_key.sh
 ##notes           : Install live-build cdebootstrap parted to use this script
@@ -182,12 +182,13 @@ build_image() {
     echo "deb-src http://debian.hypra.fr/debian/ stretch main contrib non-free" >> config/archives/hypra.list.binary
     cat hypra-repository.gpg >> config/archives/hypra.key.chroot
     #add mate-access packages
-    echo "hypra-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "hypra-archive-keyring"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "hypra-dropbox"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "hypra-kali"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "hypra-qt"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "hypra-voxygen-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "mate-accessibility-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-archive-keyring"                          >> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-dropbox"                          >> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-kali"                          >> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-qt"                          >> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-voxygen-fr"                          >> config/package-lists/desktop.tools.list.chroot
 
 	# Hypra and its dependencies
     #echo "gnome-orca hypra"              >> config/package-lists/desktop.a11y.list.chroot
