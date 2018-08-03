@@ -88,6 +88,10 @@ killAndQuit() {
     red "killing loop and existing"
     exit 0
 }
+hooks() {
+	cat hook_activate_gail_gtk_module.sh > config/hooks/activate_gail_gtk_module.chroot
+	cat hook_activate_orca_in_lightdm.sh > config/hooks/activate_orca_in_lightdm.chroot
+}
 
 build_image() {
     yellow "cleaning potential previous builds"
