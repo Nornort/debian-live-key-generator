@@ -88,10 +88,6 @@ killAndQuit() {
     red "killing loop and existing"
     exit 0
 }
-hooks() {
-	cat hook_activate_gail_gtk_module.sh > config/hooks/activate_gail_gtk_module.chroot
-	cat hook_activate_orca_in_lightdm.sh > config/hooks/activate_orca_in_lightdm.chroot
-}
 
 build_image() {
     yellow "cleaning potential previous builds"
@@ -159,18 +155,69 @@ build_image() {
     ########## Packages section. choose wich packages you like #########
     ## Debian recommends the maintained metapackages beginning by "task-"
     yellow "setting installation packages"
-    # system section
-    echo "brltty openssh-server"     >> config/package-lists/system.list.chroot
+    # live section
+    echo "live-boot"			>> config/package-lists/live.list.chroot
     check "failed to set install packages."
-    echo "cryptsetup ecryptfs-utils"                   >> config/package-lists/system.list.chroot
-    echo "kexec-tools debian-installer debian-installer-launcher"                   >> config/package-lists/system.list.chroot
-    echo "firmware-linux-free firmware-linux-nonfree"                   >> config/package-lists/system.list.chroot
+    echo "live-config"			>> config/package-lists/live.list.chroot
+    echo "live-config-systemd"		>> config/package-lists/live.list.chroot
+    echo "debian-installer"		>> config/package-lists/live.list.chroot
+    echo "debian-installer-launcher"	>> config/package-lists/live.list.chroot
+    echo "open-vm-tools"		>> config/package-lists/dkms.list.chroot_live
+    echo "open-vm-tools-desktop"	>> config/package-lists/dkms.list.chroot_live
+    echo "open-vm-tools-dkms"		>> config/package-lists/dkms.list.chroot_live
+    echo "virtualbox-guest-dkms"	>> config/package-lists/dkms.list.chroot_live
+    echo "virtualbox-guest-utils"	>> config/package-lists/dkms.list.chroot_live
+    echo "virtualbox-guest-x11"		>> config/package-lists/dkms.list.chroot_live
+    # install section
+    echo "grub-pc"			>> config/package-lists/installer.list
+    echo "pciutils"			>> config/package-lists/dkms.list.chroot_install
+    echo "broadcom-sta-dkms"		>> config/package-lists/dkms.list.chroot_install
+    echo "nvidia-kernel-dkms"		>> config/package-lists/dkms.list.chroot_install
+    echo "xserver-xorg-video-nvidia"	>> config/package-lists/dkms.list.chroot_install
+    echo "nvidia-settings"		>> config/package-lists/dkms.list.chroot_install
+    echo "nvidia-xconfig"		>> config/package-lists/dkms.list.chroot_install
+    echo "nvidia-vdpau-driver"		>> config/package-lists/dkms.list.chroot_install
+    echo "vdpau-va-driver"		>> config/package-lists/dkms.list.chroot_install
+    # system section
+    echo "isolinux"			>> config/package-lists/system.list.chroot
+    echo "syslinux-common"		>> config/package-lists/system.list.chroot
+    echo "brltty"			>> config/package-lists/system.list.chroot
+    echo "openssh-server"		>> config/package-lists/system.list.chroot
+    echo "cryptsetup"			>> config/package-lists/system.list.chroot
+    echo "ecryptfs-utils"		>> config/package-lists/system.list.chroot
+    echo "kexec-tools"			>> config/package-lists/system.list.chroot
+    echo "live-config"			>> config/package-lists/system.list.chroot
+    echo "firmware-linux-free"		>> config/package-lists/system.list.chroot
+    echo "sudo"				>> config/package-lists/system.list.chroot
+    echo "vim"				>> config/package-lists/system.list.chroot
+    echo "htop"				>> config/package-lists/system.list.chroot
+    echo "tree"				>> config/package-lists/system.list.chroot
+    echo "tmux"				>> config/package-lists/system.list.chroot
+    echo "firmware-linux-nonfree"	>> config/package-lists/system.nonfree.list
     # desktop section
-    echo "task-french-desktop task-french"  >> config/package-lists/desktop.french.list.chroot
-    echo "task-mate-desktop"                >> config/package-lists/desktop.mate.list.chroot
-    echo "gparted"                          >> config/package-lists/desktop.tools.list.chroot
-    # non-free section
-    #echo "flashplugin-nonfree"              >> config/package-lists/desktop.non-free.list.chroot
+    echo "tasksel task-desktop mate-desktop-environment" >> config/package-lists/desktop.list.chroot
+    echo "mate-desktop-environment-extras" >> config/package-lists/desktop.list.chroot
+    echo "libreoffice-gnome"		>> config/package-lists/desktop.list.chroot
+    echo "libreoffice-evolution"	>> config/package-lists/desktop.list.chroot
+    echo "gimp"				>> config/package-lists/desktop.list.chroot
+    echo "synaptic"			>> config/package-lists/desktop.list.chroot
+    echo "firefox-esr-l10n-fr"		>> config/package-lists/desktop.list.chroot
+    echo "libreoffice-l10n-fr"		>> config/package-lists/desktop.list.chroot
+    echo "libreoffice-help-fr"		>> config/package-lists/desktop.list.chroot
+    echo "network-manager-gnome"	>> config/package-lists/desktop.list.chroot
+    echo "mythes-fr"			>> config/package-lists/desktop.list.chroot
+    echo "hunspell-fr"			>> config/package-lists/desktop.list.chroot
+    echo "hyphen-fr"			>> config/package-lists/desktop.list.chroot
+    echo "task-print-server"		>> config/package-lists/desktop.list.chroot
+    echo "plymouth"			>> config/package-lists/desktop.list.chroot
+    echo "plymouth-x11"			>> config/package-lists/desktop.list.chroot
+    echo "i965-va-driver"		>> config/package-lists/desktop.list.chroot
+    # tasks section
+    echo "task-mate-desktop"		>> config/package-lists/desktop.mate.list.chroot
+    echo "task-laptop"			>> config/package-lists/standard.list.chroot
+    echo "task-ssh-server"		>> config/package-lists/standard.list.chroot
+    echo "task-french"			>> config/package-lists/localization.list.chroot
+    echo "task-french-desktop"		>> config/package-lists/localization.list.chroot
 
     # a11y section
 
@@ -182,18 +229,18 @@ build_image() {
     echo "deb-src http://debian.hypra.fr/debian/ stretch main contrib non-free" >> config/archives/hypra.list.binary
     cat hypra-repository.gpg >> config/archives/hypra.key.chroot
     #add mate-access packages
-    echo "mate-accessibility-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "mate-accessibility-mbrola-fr"                          >> config/package-lists/desktop.tools.list.chroot
-    echo "mate-accessibility-misc"                          >> config/package-lists/desktop.tools.list.chroot
-    #echo "hypra-full-fr"                          >> config/package-lists/desktop.tools.list.chroot
-    #echo "hypra-archive-keyring"                          >> config/package-lists/desktop.tools.list.chroot
-    #echo "hypra-dropbox"                          >> config/package-lists/desktop.tools.list.chroot
-    #echo "hypra-kali"                          >> config/package-lists/desktop.tools.list.chroot
-    #echo "hypra-qt"                          >> config/package-lists/desktop.tools.list.chroot
-    #echo "hypra-voxygen-fr"                          >> config/package-lists/desktop.tools.list.chroot
+    echo "mate-accessibility-full-fr"	>> config/package-lists/desktop.accessibility.list.chroot
+    echo "mate-accessibility-mbrola-fr" >> config/package-lists/desktop.accessibility.list.chroot
+    echo "mate-accessibility-misc"	>> config/package-lists/desktop.accessibility.list.chroot
+    #echo "hypra-full-fr"		>> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-archive-keyring"	>> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-dropbox"		>> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-kali"			>> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-qt"			>> config/package-lists/desktop.tools.list.chroot
+    #echo "hypra-voxygen-fr"		>> config/package-lists/desktop.tools.list.chroot
 
 	# Hypra and its dependencies
-    #echo "gnome-orca hypra"              >> config/package-lists/desktop.a11y.list.chroot
+    #echo "gnome-orca hypra"		>> config/package-lists/desktop.a11y.list.chroot
 
     green "packaging configured"
 
